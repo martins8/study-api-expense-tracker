@@ -27,7 +27,6 @@ describe("Users test suite", () => {
 			}),
 		);
 		const payload = await response.json();
-		expect(response.status).not.toBe(404);
 		expect(response.status).toBe(201);
 		expect(payload).toEqual({
 			message: "User registration successful",

@@ -12,9 +12,12 @@ const app = new Elysia()
 	.use(users);
 
 export { app };
-app.listen(3000);
 
-console.log(
-	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}
+if (import.meta.main) {
+	app.listen(3000);
+
+	console.log(
+		`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}
 📙 docs: http://${app.server?.hostname}:${app.server?.port}/openapi`,
-);
+	);
+}

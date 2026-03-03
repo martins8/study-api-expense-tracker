@@ -12,5 +12,6 @@ if (isTest) {
 }
 
 db.run("PRAGMA busy_timeout = 2000");
+db.run("PRAGMA foreign_keys = ON");
 
 export { db };

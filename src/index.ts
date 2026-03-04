@@ -1,6 +1,6 @@
 import { fromTypes, openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
-import { users } from "./modules/users/users.plugin";
+import { users } from "./modules/users/user.controller";
 
 const app = new Elysia()
 	.use(

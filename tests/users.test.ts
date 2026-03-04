@@ -76,3 +76,73 @@ describe("Users test suite", () => {
 		});
 	});
 });
+
+describe("Users sign-in test suite", () => {
+	it("/sign-in should be exist and not return 404", async () => {
+		const response = await app.handle(
+			new Request("http://localhost/api/users/sign-in", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: testEmail,
+					password: "password123",
+				}),
+			}),
+		);
+		expect(response.status).not.toBe(404);
+	});
+
+	it("/sign-in should return 401 if credentials are invalid", async () => {
+		const response = await app.handle(
+			new Request("http://localhost/api/users/sign-in", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: testEmail,
+					password: "wrongpassword",
+				}),
+			}),
+		);
+		expect(response.status).toBe(401);
+	});
+
+	it("/sign-in should return 200 if credentials are valid", async () => {
+		const response = await app.handle(
+			new Request("http://localhost/api/users/sign-in", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: testEmail,
+					password: "password123",
+				}),
+			}),
+		);
+		expect(response.status).toBe(200);
+	});
+
+	it("/sign-in should return token if credentials are valid", async () => {
+		const response = await app.handle(
+			new Request("http://localhost/api/users/sign-in", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: testEmail,
+					password: "password123",
+				}),
+			}),
+		);
+		const payload = await response.json();
+		expect(payload).toEqual({
+			message: "User authentication successful",
+			token: expect.any(String),
+		});
+	});
+});

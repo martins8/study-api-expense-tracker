@@ -26,5 +26,11 @@
 	"explorer.fileNesting.patterns": {
 		"package.json": "package-lock.json, vitest.config.ts, biome.json, .nvmrc, .gitignore, .editorconfig,tsconfig.json, eslint.config.js, prettier.config.js, webpack.config.js",
 		"dev.db": "test.db"
+	},
+	"symbols.files.associations": {
+		"*.service.ts": "typescript"
+	},
+	"symbols.folders.associations": {
+		"infra": "folder-database"
 	}
 }

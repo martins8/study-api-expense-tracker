@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { db } from "../src/db/db.js";
+import { db } from "../src/infra/db.js";
 
 describe("Database test suite", () => {
 	it("should connect to the database", () => {

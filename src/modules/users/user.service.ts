@@ -1,6 +1,6 @@
 import type { SignInBody, SignUpBody } from "./user.dto";
 import {
-	getHashByEmail,
+	getSignInDataByEmail,
 	getUserIdByEmail,
 	insertUser,
 } from "./user.repository";
@@ -8,14 +8,14 @@ import {
 const SIMULATE_ENV_PEPPER = "some_random_pepper_value";
 
 type CreateUserResult =
-	| { ok: true }
+	| { ok: true; id: string }
 	| {
 			ok: false;
 			error: "email_exists" | "invalid_email_format" | "internal_error";
 	  };
 
 type SignInResult =
-	| { ok: true }
+	| { ok: true; id: string }
 	| {
 			ok: false;
 			error: "invalid_credentials" | "invalid_email_format" | "internal_error";
@@ -36,7 +36,7 @@ export async function signUp(payload: SignUpBody): Promise<CreateUserResult> {
 		);
 		insertUser({ id, email, username, password_hash });
 
-		return { ok: true };
+		return { ok: true, id };
 	} catch (error) {
 		console.error("Error creating user:", error);
 		return { ok: false, error: "internal_error" };
@@ -50,17 +50,17 @@ export async function signIn(payload: SignInBody): Promise<SignInResult> {
 		if (!emailFormatIsValid(email))
 			return { ok: false, error: "invalid_email_format" };
 
-		const hashStored = getHashByEmail(email);
-		if (!hashStored) return { ok: false, error: "invalid_credentials" };
+		const storedData = getSignInDataByEmail(email);
+		if (!storedData) return { ok: false, error: "invalid_credentials" };
 
 		const credentialsValid = await Bun.password.verify(
 			password + SIMULATE_ENV_PEPPER,
-			hashStored,
+			storedData.password_hash,
 		);
 
 		if (!credentialsValid) return { ok: false, error: "invalid_credentials" };
 		// send ok and token
-		return { ok: true };
+		return { ok: true, id: storedData.id };
 	} catch (error) {
 		console.error("Error signing in:", error);
 		return { ok: false, error: "internal_error" };

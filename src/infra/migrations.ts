@@ -1,11 +1,13 @@
 import { db } from "./db";
 
 const categories = [
-	"Food",
-	"Transport",
-	"Entertainment",
+	"Groceries",
+	"Leisure",
+	"Electronics",
 	"Utilities",
+	"Clothing",
 	"Health",
+	"Others",
 ];
 export function migrate() {
 	console.log("🛢️  Running database migrations...");

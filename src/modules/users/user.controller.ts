@@ -1,17 +1,20 @@
 import { Elysia, status } from "elysia";
+import { authSetup } from "../../infra/auth.plugin";
 import { AuthModel } from "./user.dto";
 import { signIn, signUp } from "./user.service";
 
 export const users = new Elysia({ prefix: "api/users" })
+	.use(authSetup)
 	.use(AuthModel)
 	.post(
 		"/sign-up",
-		async ({ body }) => {
+		async ({ body, jwt }) => {
 			const result = await signUp(body);
 			if (result.ok) {
+				const token = await jwt.sign({ sub: result.id });
 				return status(201, {
 					message: "User registration successful",
-					token: "fake",
+					token,
 				});
 			}
 			const statusMap = {
@@ -42,12 +45,13 @@ export const users = new Elysia({ prefix: "api/users" })
 	)
 	.post(
 		"/sign-in",
-		async ({ body }) => {
+		async ({ body, jwt }) => {
 			const result = await signIn(body);
 			if (result.ok) {
+				const token = await jwt.sign({ sub: result.id });
 				return status(200, {
 					message: "User authentication successful",
-					token: "fake",
+					token,
 				});
 			}
 			const statusMap = {

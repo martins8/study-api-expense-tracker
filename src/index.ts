@@ -1,5 +1,6 @@
 import { fromTypes, openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
+import { expenses } from "./modules/expenses/expense.controller";
 import { users } from "./modules/users/user.controller";
 
 const app = new Elysia()
@@ -9,7 +10,8 @@ const app = new Elysia()
 		}),
 	)
 	.get("/", () => "Hello Elysia")
-	.use(users);
+	.use(users)
+	.use(expenses);
 
 export { app };
 

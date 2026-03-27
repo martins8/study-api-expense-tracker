@@ -30,9 +30,9 @@ export function getUserIdByEmail(email: string): string | null {
 	return result ? result.id : null;
 }
 
-export function getHashByEmail(email: string): string | null {
+export function getSignInDataByEmail(email: string): { id: string; password_hash: string } | null {
 	const result = db
-		.prepare("SELECT password_hash FROM users WHERE email = ?")
-		.get(email) as { password_hash: string } | null;
-	return result ? result.password_hash : null;
+		.prepare("SELECT id, password_hash FROM users WHERE email = ?")
+		.get(email) as { id: string; password_hash: string } | null;
+	return result ? result : null;
 }
